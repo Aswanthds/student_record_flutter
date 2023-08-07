@@ -26,7 +26,7 @@ Future<void> initializeDatabase() async {
   );
 }
 
-Future<void> addStudents(Students student) async {
+Future<void> addStudents(Students student, BuildContext ctx) async {
   try {
     await _db.rawInsert(
         'INSERT INTO $studentsTable (${StudentsFields.name},${StudentsFields.age},${StudentsFields.email},${StudentsFields.domain},${StudentsFields.image}) VALUES (?,?,?,?,?)',
@@ -84,8 +84,6 @@ Future<void> updateStudent(int id, String name, String email, String domain,
     updatedStudent.email = email;
     updatedStudent.domain = domain;
     updatedStudent.image = image;
-
-    studentListNotifier.notifyListeners();
   }
   studentListNotifier.notifyListeners();
   getAllStudent();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
@@ -78,7 +79,11 @@ class _AddEditStudentScreenState extends State<AddStudentScreen> {
         image: _imageFile?.path ?? '',
       );
 
-      addStudents(newStudent);
+      addStudents(newStudent, context).then((value) =>
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.green,
+              content: Text("Added Sucesfully"))));
       Navigator.of(context).pop();
     }
   }
@@ -111,6 +116,9 @@ class _AddEditStudentScreenState extends State<AddStudentScreen> {
                   },
                 ),
                 TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _ageController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
@@ -58,13 +59,6 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
     super.dispose();
   }
 
-  Widget get saveButton => OutlinedButton(
-        onPressed: () {
-          addStudents(widget.student!);
-        },
-        child: const Text("Save"),
-      );
-
   bool isEmailValid(String email) {
     final emailRegExp = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -107,7 +101,7 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
             : _imageFile!.path,
       );
 
-     await updateStudent(
+      await updateStudent(
         newStudent.id!,
         newStudent.name,
         newStudent.email,
@@ -148,6 +142,9 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
                   },
                 ),
                 TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _ageController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -193,28 +190,28 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
                     children: [
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
+                            backgroundColor: Colors.deepOrange),
                         onPressed: _getImageFromCamera,
                         icon: const Icon(
                           Icons.camera,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                         label: const Text(
                           'Camera',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
+                            backgroundColor: Colors.black),
                         onPressed: _getImageFromGallery,
                         icon: const Icon(
                           Icons.upload,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                         label: const Text(
                           'Upload',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
@@ -224,14 +221,14 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
                   width: size.width,
                   child: ElevatedButton(
                     style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
+                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
                     onPressed: () {
                       _saveStudent();
                     },
                     child: const Text(
                       'Save',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),

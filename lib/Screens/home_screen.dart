@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:student/Screens/add_student_screen.dart';
 import 'package:student/Screens/edit_screen.dart';
 import 'package:student/Screens/profile_student_screen.dart';
-
+import 'package:student/Screens/search.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
 
@@ -28,22 +28,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Student Record'),
         actions: [
-          IconButton(onPressed: getAllStudent, icon: Icon(Icons.refresh))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SearchScreen(),
+                ));
+              },
+              icon: Icon(Icons.search))
         ],
       ),
       body: ValueListenableBuilder(
         builder: (BuildContext context, studentList, Widget? child) {
-          return ListView.builder(
-            itemCount: studentList.length,
-            itemBuilder: (context, index) {
-              final student = studentList[index];
-              return SizedBox(
-                height: 80,
-                child: ListWidget(student: student),
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: getAllStudent,
+            child: ListView.builder(
+              itemCount: studentList.length,
+              itemBuilder: (context, index) {
+                final student = studentList[index];
+                return SizedBox(
+                  height: 80,
+                  child: ListWidget(student: student),
+                );
+              },
+            ),
           );
         },
         valueListenable: studentListNotifier,
@@ -125,7 +135,28 @@ class ListWidget extends StatelessWidget {
               IconButton(
                 color: Colors.black,
                 onPressed: () {
-                  deleteStudent(student.id!);
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Are you Sure ?"),
+                      content: Text("Once you delete ,u cant recover it"),
+                      actions: [
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              deleteStudent(student.id!)
+                                  .then((value) => Navigator.of(context).pop());
+                            },
+                            icon: Icon(Icons.delete),
+                            label: Text("Delete"))
+                      ],
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.delete),
               ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:student/Screens/edit_screen.dart';
+import 'package:student/Screens/home_screen.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
 
@@ -30,8 +31,31 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
         actions: [
           IconButton(
             onPressed: () async {
-              deleteStudent(widget.student.id!)
-                  .then((value) => Navigator.of(context).pop());
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Are you Sure ?"),
+                  content: Text("Once you delete ,u cant recover it"),
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Cancel"),
+                    ),
+                    ElevatedButton.icon(
+                        onPressed: () {
+                          deleteStudent(widget.student.id!).then((value) =>
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                  (route) => false));
+                        },
+                        icon: Icon(Icons.delete),
+                        label: Text("Delete"))
+                  ],
+                ),
+              );
             },
             icon: const Icon(Icons.delete),
           ),
