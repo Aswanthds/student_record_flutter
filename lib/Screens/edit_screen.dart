@@ -107,7 +107,7 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
             : _imageFile!.path,
       );
 
-      updateStudent(
+     await updateStudent(
         newStudent.id!,
         newStudent.name,
         newStudent.email,

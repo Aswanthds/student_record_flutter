@@ -73,10 +73,10 @@ class ListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Color(0xFF00EEE2),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Card(
+        color: const Color(0xFFEECA00),
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
@@ -101,6 +101,10 @@ class ListWidget extends StatelessWidget {
           title: Text(
             student.name,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            student.domain,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           trailing: Wrap(
             spacing: 20,

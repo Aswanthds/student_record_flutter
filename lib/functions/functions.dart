@@ -87,7 +87,6 @@ Future<void> updateStudent(int id, String name, String email, String domain,
 
     studentListNotifier.notifyListeners();
   }
-
-  // Fetch the updated list from the database
-  await getAllStudent();
+  studentListNotifier.notifyListeners();
+  getAllStudent();
 }

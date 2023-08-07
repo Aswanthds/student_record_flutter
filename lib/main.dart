@@ -18,10 +18,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.from(
         colorScheme: const ColorScheme.light(
-            background: Colors.white,
-            primary: Color(0xFF00EEE2),
+            background: Color(0xFFEEEEEE),
+            primary: Color(0xFFDA7D03),
             brightness: Brightness.light,
-            secondary: Color(0xff03dac6)),
+            secondary: Color(0xFFDA7D03)),
       ),
       home: const HomeScreen(),
     );
