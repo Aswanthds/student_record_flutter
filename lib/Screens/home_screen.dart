@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getAllStudent();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -50,7 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 final student = studentList[index];
                 return SizedBox(
                   height: 80,
-                  child: ListWidget(student: student),
+                  child: ListWidget(
+                    student: student,
+                  ),
                 );
               },
             ),
@@ -80,6 +83,7 @@ class ListWidget extends StatelessWidget {
   });
 
   final Students student;
+  final String defaultImageUrl = 'assets/dummy.webp';
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +104,7 @@ class ListWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(60),
               child: student.image.isEmpty
-                  ? Image.network(
-                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
+                  ? Image.asset(defaultImageUrl)
                   : Image.file(
                       File(student.image),
                       fit: BoxFit.cover,
@@ -149,7 +152,7 @@ class ListWidget extends StatelessWidget {
                         ),
                         ElevatedButton.icon(
                             onPressed: () {
-                              deleteStudent(student.id!)
+                              _deleteStudent(student, context)
                                   .then((value) => Navigator.of(context).pop());
                             },
                             icon: Icon(Icons.delete),
@@ -165,5 +168,25 @@ class ListWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _deleteStudent(Students student, BuildContext ctx) async {
+    try {
+      await deleteStudent(student.id!);
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+          margin: EdgeInsets.all(5),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+          content: Text("Removed Sucesfully")));
+    } catch (e) {
+      print("Exception filed :${e.toString()}");
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+          margin: EdgeInsets.all(5),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          content: Text("Error Occured")));
+    }
   }
 }

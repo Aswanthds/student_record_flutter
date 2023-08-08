@@ -34,8 +34,8 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text("Are you Sure ?"),
-                  content: Text("Once you delete ,u cant recover it"),
+                  title: const Text("Are you Sure ?"),
+                  content: const Text("Once you delete ,u cant recover it"),
                   actions: [
                     OutlinedButton(
                       onPressed: () {
@@ -45,14 +45,16 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
                     ),
                     ElevatedButton.icon(
                         onPressed: () {
-                          deleteStudent(widget.student.id!).then((value) =>
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()),
-                                  (route) => false));
+                          _deleteStudent(widget.student, context).then(
+                              (value) => Navigator.of(context)
+                                  .pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen()),
+                                      (route) => false));
                         },
-                        icon: Icon(Icons.delete),
-                        label: Text("Delete"))
+                        icon: const Icon(Icons.delete),
+                        label: const Text("Delete"))
                   ],
                 ),
               );
@@ -128,5 +130,25 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
       ),
       //
     );
+  }
+
+  Future<void> _deleteStudent(Students student, BuildContext ctx) async {
+    try {
+      await deleteStudent(student.id!);
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+          margin: EdgeInsets.all(5),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+          content: Text("Removed Sucesfully")));
+    } catch (e) {
+      print("Exception filed :${e.toString()}");
+      ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+          margin: EdgeInsets.all(5),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          content: Text("Error Occured")));
+    }
   }
 }

@@ -79,12 +79,23 @@ class _AddEditStudentScreenState extends State<AddStudentScreen> {
         image: _imageFile?.path ?? '',
       );
 
-      addStudents(newStudent, context).then((value) =>
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              duration: Duration(seconds: 2),
-              backgroundColor: Colors.green,
-              content: Text("Added Sucesfully"))));
-      Navigator.of(context).pop();
+      try {
+        addStudents(newStudent, context).then((value) =>
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                margin: EdgeInsets.all(5),
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.green,
+                content: Text("Added Sucesfully"))));
+        Navigator.of(context).pop();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.all(5),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
+            content: Text("Error Occured")));
+      }
     }
   }
 

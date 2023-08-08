@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student/Screens/home_screen.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
 
@@ -101,15 +102,34 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
             : _imageFile!.path,
       );
 
-      await updateStudent(
-        newStudent.id!,
-        newStudent.name,
-        newStudent.email,
-        newStudent.domain,
-        newStudent.image,
-        newStudent.age!,
-      );
-      Navigator.of(context).pop();
+      try {
+        updateStudent(
+          newStudent.id!,
+          newStudent.name,
+          newStudent.email,
+          newStudent.domain,
+          newStudent.image,
+          newStudent.age!,
+        ).then((value) => Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+            (route) => false));
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.all(5),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.green,
+            content: Text("Updated Succesfully")));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            margin: EdgeInsets.all(5),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
+            content: Text("Error Occured")));
+      }
     }
   }
 

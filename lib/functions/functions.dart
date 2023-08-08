@@ -1,15 +1,22 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, unnecessary_null_comparison
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:student/model/students.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 ValueNotifier<List<Students>> studentListNotifier = ValueNotifier([]);
 late Database _db;
 
 Future<void> initializeDatabase() async {
+  Directory documentsDirectory = await getApplicationDocumentsDirectory();
+  print(documentsDirectory.uri);
+  String path = join(documentsDirectory.path, "student.db");
   _db = await openDatabase(
-    'student.db',
+    path,
     version: 1,
     onCreate: (db, version) {
       db.execute('''
@@ -27,21 +34,17 @@ Future<void> initializeDatabase() async {
 }
 
 Future<void> addStudents(Students student, BuildContext ctx) async {
-  try {
-    await _db.rawInsert(
-        'INSERT INTO $studentsTable (${StudentsFields.name},${StudentsFields.age},${StudentsFields.email},${StudentsFields.domain},${StudentsFields.image}) VALUES (?,?,?,?,?)',
-        [
-          student.name,
-          student.age,
-          student.email,
-          student.domain,
-          student.image
-        ]);
-    studentListNotifier.value.add(student);
-    studentListNotifier.notifyListeners();
-  } catch (e) {
-    print("Exception filed :${e.toString()}");
-  }
+  await _db.rawInsert(
+      'INSERT INTO $studentsTable (${StudentsFields.name},${StudentsFields.age},${StudentsFields.email},${StudentsFields.domain},${StudentsFields.image}) VALUES (?,?,?,?,?)',
+      [
+        student.name,
+        student.age,
+        student.email,
+        student.domain,
+        student.image
+      ]);
+  studentListNotifier.value.add(student);
+  studentListNotifier.notifyListeners();
 }
 
 Future<void> getAllStudent() async {
@@ -53,13 +56,9 @@ Future<void> getAllStudent() async {
 }
 
 Future<void> deleteStudent(int id) async {
-  try {
-    await _db.rawDelete('DELETE FROM $studentsTable WHERE id = ?', [id]);
-    studentListNotifier.value.remove(StudentsFields.id);
-    getAllStudent();
-  } catch (e) {
-    print("Exception filed :${e.toString()}");
-  }
+  await _db.rawDelete('DELETE FROM $studentsTable WHERE id = ?', [id]);
+  studentListNotifier.value.remove(StudentsFields.id);
+  getAllStudent();
 }
 
 Future<void> updateStudent(int id, String name, String email, String domain,
