@@ -5,6 +5,8 @@ import 'package:student/model/students.dart';
 import 'package:student/Screens/profile_student_screen.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }

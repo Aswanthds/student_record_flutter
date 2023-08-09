@@ -1,13 +1,14 @@
 import 'dart:io';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:student/Screens/add_student_screen.dart';
-import 'package:student/Screens/edit_screen.dart';
+import 'package:student/Screens/edit_student_screen.dart';
 import 'package:student/Screens/profile_student_screen.dart';
-import 'package:student/Screens/search.dart';
+import 'package:student/Screens/search_screen.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
 
-final String defaultImageUrl = 'assets/dummy.webp';
+const String defaultImageUrl = 'assets/dummy.webp';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+  
     getAllStudent();
     return Scaffold(
       appBar: AppBar(
@@ -38,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SearchScreen(),
+                  builder: (context) => const SearchScreen(),
                 ));
               },
-              icon: Icon(Icons.search))
+              icon: const Icon(Icons.search))
         ],
       ),
       body: ValueListenableBuilder(
@@ -69,11 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
           showModalBottomSheet(
             enableDrag: true,
             context: context,
-            builder: (context) => Container(
-                height: size.height,
+            builder: (context) => SizedBox(
                 child: AddStudentScreen(
-                  student: student,
-                )),
+              student: student,
+            )),
           );
         },
         child: const Icon(
@@ -99,7 +99,7 @@ class ListWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Card(
-        color: Color.fromARGB(192, 73, 72, 72),
+        color: const Color.fromARGB(192, 73, 72, 72),
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
@@ -122,11 +122,12 @@ class ListWidget extends StatelessWidget {
           ),
           title: Text(
             student.name,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             student.domain,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           trailing: Wrap(
             spacing: 20,
@@ -151,8 +152,8 @@ class ListWidget extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text("Are you Sure ?"),
-                      content: Text("Once you delete ,u cant recover it"),
+                      title: const Text("Are you Sure ?"),
+                      content: const Text("Once you delete ,u cant recover it"),
                       actions: [
                         OutlinedButton(
                           onPressed: () {
@@ -165,10 +166,10 @@ class ListWidget extends StatelessWidget {
                               _deleteStudent(student, context)
                                   .then((value) => Navigator.of(context).pop());
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.delete,
                             ),
-                            label: Text("Delete"))
+                            label: const Text("Delete"))
                       ],
                     ),
                   );
@@ -184,7 +185,7 @@ class ListWidget extends StatelessWidget {
 
   Future<void> _deleteStudent(Students student, BuildContext ctx) async {
     try {
-      await deleteStudent(student.id!);
+       deleteStudent(student.id!);
       ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
           margin: EdgeInsets.all(5),
           behavior: SnackBarBehavior.floating,
@@ -192,7 +193,7 @@ class ListWidget extends StatelessWidget {
           backgroundColor: Colors.green,
           content: Text("Removed Sucesfully")));
     } catch (e) {
-      print("Exception filed :${e.toString()}");
+      log("Exception filed :${e.toString()}");
       ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
           margin: EdgeInsets.all(5),
           behavior: SnackBarBehavior.floating,

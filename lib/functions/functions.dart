@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, unnecessary_null_comparison
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ late Database _db;
 
 Future<void> initializeDatabase() async {
   Directory documentsDirectory = await getApplicationDocumentsDirectory();
-  print(documentsDirectory.uri);
+  log(documentsDirectory.uri.toString());
   String path = join(documentsDirectory.path, "student.db");
   _db = await openDatabase(
     path,
@@ -57,7 +58,7 @@ Future<void> getAllStudent() async {
 
 Future<void> deleteStudent(int id) async {
   await _db.rawDelete('DELETE FROM $studentsTable WHERE id = ?', [id]);
-  studentListNotifier.value.remove(StudentsFields.id);
+  studentListNotifier.value.remove(id);
   getAllStudent();
 }
 

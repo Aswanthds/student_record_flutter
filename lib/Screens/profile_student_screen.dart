@@ -1,6 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:student/Screens/edit_screen.dart';
+import 'package:student/Screens/edit_student_screen.dart';
 import 'package:student/Screens/home_screen.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
@@ -134,7 +135,7 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
 
   Future<void> _deleteStudent(Students student, BuildContext ctx) async {
     try {
-      await deleteStudent(student.id!);
+       deleteStudent(student.id!);
       ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
           margin: EdgeInsets.all(5),
           behavior: SnackBarBehavior.floating,
@@ -142,7 +143,7 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
           backgroundColor: Colors.green,
           content: Text("Removed Sucesfully")));
     } catch (e) {
-      print("Exception filed :${e.toString()}");
+      log("Exception filed :${e.toString()}");
       ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
           margin: EdgeInsets.all(5),
           behavior: SnackBarBehavior.floating,

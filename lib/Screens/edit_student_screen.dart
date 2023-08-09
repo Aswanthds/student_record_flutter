@@ -113,7 +113,7 @@ class _EditStudentScreenState extends State<EditStudentScreen> {
         );
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => HomeScreen(),
+              builder: (context) => const HomeScreen(),
             ),
             (route) => false);
       } catch (e) {
