@@ -87,8 +87,8 @@ class _ProfileStudentScreenState extends State<ProfileStudentScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: widget.student.image.isEmpty
-                        ? Image.network(
-                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                        ? Image.asset(
+                            defaultImageUrl,
                             fit: BoxFit.cover,
                           )
                         : Image.file(

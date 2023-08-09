@@ -7,6 +7,8 @@ import 'package:student/Screens/search.dart';
 import 'package:student/functions/functions.dart';
 import 'package:student/model/students.dart';
 
+final String defaultImageUrl = 'assets/dummy.webp';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     getAllStudent();
     return Scaffold(
       appBar: AppBar(
@@ -63,14 +66,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddStudentScreen(),
-            ),
+          showModalBottomSheet(
+            enableDrag: true,
+            context: context,
+            builder: (context) => Container(
+                height: size.height,
+                child: AddStudentScreen(
+                  student: student,
+                )),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -90,7 +99,7 @@ class ListWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Card(
-        color: const Color(0xFFEECA00),
+        color: Color.fromARGB(192, 73, 72, 72),
         child: ListTile(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
@@ -113,30 +122,31 @@ class ListWidget extends StatelessWidget {
           ),
           title: Text(
             student.name,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             student.domain,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white),
           ),
           trailing: Wrap(
             spacing: 20,
             direction: Axis.horizontal,
             children: [
               IconButton(
-                color: Colors.black,
+                color: Colors.white,
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => EditStudentScreen(
-                              student: student,
-                            )),
+                  showModalBottomSheet(
+                    enableDrag: true,
+                    context: context,
+                    builder: (context) => EditStudentScreen(
+                      student: student,
+                    ),
                   );
                 },
                 icon: const Icon(Icons.edit),
               ),
               IconButton(
-                color: Colors.black,
+                color: Colors.white,
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -155,7 +165,9 @@ class ListWidget extends StatelessWidget {
                               _deleteStudent(student, context)
                                   .then((value) => Navigator.of(context).pop());
                             },
-                            icon: Icon(Icons.delete),
+                            icon: Icon(
+                              Icons.delete,
+                            ),
                             label: Text("Delete"))
                       ],
                     ),
